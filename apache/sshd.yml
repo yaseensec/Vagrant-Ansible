@@ -43,5 +43,4 @@
           zone: "{{item.zone}}"
         with_items:
           - {port: "2849", proto: "tcp", state: "enabled", zone: "public" }
-            #notify: restart firewalld
 
