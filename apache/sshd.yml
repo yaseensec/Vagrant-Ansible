@@ -1,0 +1,50 @@
+---
+  - hosts: app
+    become: yes
+    handlers:
+      - name: restart sshd
+        service: name=sshd state=restarted
+          #- name: restart firewalld
+          #service: name=firewalld state=restarted
+
+    tasks:
+      - name: Update SSH configuration to be more secure.
+        lineinfile:
+          dest: /etc/ssh/sshd_config
+          regexp: "{{ item.regexp }}"
+          line: "{{ item.line }}"
+          state: present
+          validate: 'sshd -t -f %s'
+        with_items:
+          - regexp: "^PasswordAuthentication"
+            line: "PasswordAuthentication no"
+          - regexp: "^PermitRootLogin"
+            line: "PermitRootLogin no"
+          - regexp: "^Port"
+            line: "Port 2849"
+        notify: restart sshd
+
+      - name: Ensure policycoreutils-python is installed.
+        yum:
+          name: policycoreutils-python
+          state: present
+
+      - name: Allow sshd to listen on tcp port 2849.
+        seport:
+          ports: 2849
+          proto: tcp
+          setype: ssh_port_t
+          state: present
+        when: ansible_selinux.status == 'enabled'
+      
+      - name: FirewallD rules
+        firewalld:
+          permanent: yes
+          immediate: yes
+          port: "{{item.port}}/{{item.proto}}"
+          state: "{{item.state}}"
+          zone: "{{item.zone}}"
+        with_items:
+          - {port: "2849", proto: "tcp", state: "enabled", zone: "public" }
+            #notify: restart firewalld
+
