@@ -1,11 +1,11 @@
 # Application servers
 [app]
-192.168.122.4
-192.168.122.5
+192.168.122.11
+192.168.122.12
 
 # Database server
 [db]
-192.168.122.6
+192.168.122.13
 
 # Group 'multi' with all servers
 [multi:children]
@@ -15,5 +15,5 @@ db
 # Variables that will be applied to all servers
 [multi:vars]
 ansible_user=vagrant
-ansible_ssh_private_key_file=./vagrant.pem
+ansible_ssh_private_key_file=./private.pem
 ansible_port=2849

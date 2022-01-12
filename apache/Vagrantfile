@@ -6,36 +6,31 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provider :libvirt do |v|
     v.memory = 512
   end
-  #config.vm.network :forwarded_port, guest: 22, host: 22, id: "ssh", disabled: true
-  #config.vm.network :forwarded_port, guest: 2849, host: 2221, auto_correct: true
-  config.vm.provision "file", source: "./vagrant.pub", destination: "~/.ssh/vagrant.pub"
+  config.vm.provision "file", source: "./public.pub", destination: "~/.ssh/public.pub"
   config.vm.provision "shell", inline: <<-SHELL
-    cat /home/vagrant/.ssh/vagrant.pub >> /home/vagrant/.ssh/authorized_keys
+    cat /home/vagrant/.ssh/public.pub >> /home/vagrant/.ssh/authorized_keys
   SHELL
 
 
   # Application server 1.
   config.vm.define "app1" do |app|
     app.vm.hostname = "orc-app1.test"
-    # app.vm.network :private_network,
-      # :ip => "192.168.122.11",
-      # :libvirt__network_name => "default"
-    app.vm.network :private_network, ip: "192.168.122.4"
+    app.vm.network :private_network,
+      :ip => "192.168.122.11",
+      :libvirt__network_name => "default"
   end
   # Application server 2.
   config.vm.define "app2" do |app|
     app.vm.hostname = "orc-app2.test"
-    # app.vm.network :private_network,
-    #   :ip => "192.168.122.12",
-    #   :libvirt__network_name => "default"
-    app.vm.network :private_network, ip: "192.168.122.5"
+    app.vm.network :private_network,
+      :ip => "192.168.122.12",
+      :libvirt__network_name => "default"
   end
   # Database server.
   config.vm.define "db" do |db|
     db.vm.hostname = "orc-db.test"
-    # db.vm.network :private_network,
-    #   :ip => "192.168.122.13",
-    #   :libvirt__network_name => "default"
-    db.vm.network :private_network, ip: "192.168.122.6"
+    db.vm.network :private_network,
+      :ip => "192.168.122.13",
+      :libvirt__network_name => "default"
   end
 end
