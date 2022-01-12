@@ -4,9 +4,6 @@
     handlers:
       - name: restart sshd
         service: name=sshd state=restarted
-          #- name: restart firewalld
-          #service: name=firewalld state=restarted
-
     tasks:
       - name: Update SSH configuration to be more secure.
         lineinfile:
