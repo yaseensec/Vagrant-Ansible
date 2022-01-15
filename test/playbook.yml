@@ -1,0 +1,14 @@
+---
+- hosts: app
+  tasks: 
+  - name: Env Variable add to remote user shell
+    lineinfile:
+      dest: ~/.bash_profile
+      regexp: '^NAME='
+      line: "NAME=dark"
+  - name: Get value of env varaible added
+    shell: '. ~/.bash_profile && echo $NAME'
+    register: name
+  - name: Print value of env varaible
+    debug:
+      msg: "The Variable is {{ name.stdout }}"
