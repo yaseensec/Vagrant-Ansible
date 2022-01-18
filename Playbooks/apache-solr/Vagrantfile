@@ -1,0 +1,22 @@
+VAGRANTFILE_API_VERSION = "2"
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  config.vm.box = "generic/ubuntu2004"
+  config.vm.hostname = "solr.test"
+  config.vm.network :private_network, ip: "192.168.122.7"
+
+  config.ssh.insert_key = false
+  config.vm.synced_folder ".", "/vagrant", disabled: true
+  
+  config.vm.provider :libvirt do |v|
+    v.memory = 1536
+  end
+  config.vm.provision "file", source: "./public.pub", destination: "~/.ssh/public.pub"
+  config.vm.provision "shell", inline: <<-SHELL
+    cat /home/vagrant/.ssh/public.pub >> /home/vagrant/.ssh/authorized_keys
+  SHELL
+  
+  # Ansible provisioner.
+  #config.vm.provision :ansible do |ansible|
+  #  ansible.playbook = "provisioning/solr.yml"
+  #end
+end

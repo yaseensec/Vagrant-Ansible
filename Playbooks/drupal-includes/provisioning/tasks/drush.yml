@@ -1,0 +1,8 @@
+---
+- name: Add drush to the Drupal site with Composer.
+  composer:
+    command: require
+    arguments: drush/drush:10.*
+    working_dir: "{{ drupal_core_path }}"
+  become_user: www-data
+  when: not drupal_composer_json.stat.exists
