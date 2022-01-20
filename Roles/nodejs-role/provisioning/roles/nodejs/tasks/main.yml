@@ -1,7 +1,24 @@
 ---
-- name: Install Node.js (npm plus all its dependencies).
-  yum: name=npm state=present enablerepo=epel
+# - name: Install Node.js (npm plus all its dependencies).
+#   yum: 
+#     name: npm 
+#     state: present 
+#     enablerepo: epel
 
-- name: Install forever module (to run our Node.js app).
-  npm: name=forever global=yes state=present
+- name: Adding Nodejs yum repo
+  shell:
+    "curl -sL https://rpm.nodesource.com/setup_16.x | sudo -E bash -"
+
+- name: Install Node.js (npm plus all its dependencies).
+  yum: 
+    name: nodejs 
+    state: present 
+      #enablerepo: epel
+
+- name: Install Npm Modules required for our app
+  npm:
+    name: "{{ item }}"
+    global: yes
+    state: present
+  with_items: "{{ node_npm_modules }}"
 
