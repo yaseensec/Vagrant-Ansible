@@ -1,6 +1,6 @@
 # Application servers
 [app]
-192.168.122.5
+192.168.121.5
 
 [app:vars]
 ansible_user=vagrant

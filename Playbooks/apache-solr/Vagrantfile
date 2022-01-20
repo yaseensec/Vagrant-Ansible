@@ -2,7 +2,9 @@ VAGRANTFILE_API_VERSION = "2"
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.box = "generic/ubuntu2004"
   config.vm.hostname = "solr.test"
-  config.vm.network :private_network, ip: "192.168.122.7"
+  config.vm.network :private_network,
+      :ip => "192.168.121.7",
+      :libvirt__network_name => "vagrant"
 
   config.ssh.insert_key = false
   config.vm.synced_folder ".", "/vagrant", disabled: true

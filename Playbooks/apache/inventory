@@ -1,11 +1,11 @@
 # Application servers
 [app]
-192.168.122.11
-192.168.122.12
+192.168.121.11
+192.168.121.12
 
 # Database server
 [db]
-192.168.122.13
+192.168.121.13
 
 # Group 'multi' with all servers
 [multi:children]
