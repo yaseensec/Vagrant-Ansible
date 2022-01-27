@@ -1,0 +1,27 @@
+---
+- hosts: rhel8
+  become: true
+
+  tasks:
+    - name: Adding Docker repo
+      yum_repository:
+        name: Docker-CE
+        description: “Repo for Docker-CE”
+        baseurl: https://download.docker.com/linux/centos/8/x86_64/stable/ 
+        gpgcheck: yes
+        gpgkey: https://download.docker.com/linux/centos/gpg
+
+    - name: Installing Docker-CE
+      yum:
+        state: present
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+
+    - name: Ensure that Docker is Started and Enabled at boot 
+      service: 
+        name: docker 
+        state: started
+        enabled: true
+
